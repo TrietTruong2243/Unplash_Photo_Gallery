@@ -2,8 +2,9 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 function PhotoCard({ url, author }) {
+    //Định nghĩa "Card" trong danh sách ảnh
   return (
-    <Card>
+    <Card style={{background: "#C0C0C0"}}>
       <div
         style={{
           height: "300px",

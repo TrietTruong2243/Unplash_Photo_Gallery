@@ -1,20 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import ContainerExample from './components/header';
-import Header from './components/header';
-import Content from './components/content';
-function App() {
-  const [count, setCount] = useState(0)
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./components/header";
+import Content from "./components/content";
+import {  BrowserRouter as Router } from "react-router-dom"; // Import BrowserRouter
 
+function App() {
+    //Khởi tạo trang web với Header và Content
   return (
     <>
-      <Header />
-      <Content />
+      <Router>
+        <Header />
+        <Content></Content>
+      </Router>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

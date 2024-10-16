@@ -1,14 +1,16 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 
 function Header() {
+    //Thanh header của trang web
   return (
-    <Navbar expand="lg" className="bg-body-tertiary bg-blue">
+    <Navbar expand="lg" style={{ background: "#00FFFF" }}>
       <Container>
-        Photo Gallery
-        </Container>
+        <Navbar.Brand as={Link} to="/">
+          <Container>Photo Gallery from Unsplash</Container>
+        </Navbar.Brand>
+      </Container>
     </Navbar>
   );
 }

@@ -1,25 +1,32 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Link } from "react-router-dom"; // Import Link for navigation
+
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import PhotoCard from "./photo_card";
+import CustomSpinner from "../others/spinner";
 
 function PhotoList() {
-  const [photos, setPhotos] = useState([]); // Cập nhật đúng tên biến
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const ACCESS_KEY = "lJ_ghR4samPGuSjKTQHw-ivbggipU6kZJu0BcRIBf7M";
+  const [photos, setPhotos] = useState([]); //Danh sách ảnh
+  const [page, setPage] = useState(1); //Thông tin về page
+  const [loading, setLoading] = useState(false); //Trạng thái loading
+  const [hasMore, setHasMore] = useState(true); //Trạng thái tìm thêm khi người dùng muốn scroll xuống để tải thêm hình ảnh
+  const [errors, setErrors] = useState(null); //Định nghĩa lỗi
+  const ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+  const UNSPLASH_API = import.meta.env.VITE_UNSPLASH_API;
   const isFetching = useRef(false);
-
-  const fetchImages = async (page) => {
+    //Lấy hình ảnh với API từ Unsplash
+  const fetchPhotos = async (page) => {
     if (isFetching.current) return;
     isFetching.current = true;
     setLoading(true);
+    setErrors(null);
     try {
       const response = await fetch(
-        `https://api.unsplash.com/photos/?client_id=${ACCESS_KEY}&page=${page}`
+        `${UNSPLASH_API}?client_id=${ACCESS_KEY}&page=${page}`
       );
+
       const data = await response.json();
 
       // Kiểm tra nếu không còn ảnh để tải
@@ -29,17 +36,18 @@ function PhotoList() {
         setPhotos((prevPhotos) => [...prevPhotos, ...data]); // Cập nhật ảnh mới
       }
     } catch (error) {
-      console.error("Error fetching images:", error);
+      console.error("Error fetching photos:", error);
+      setErrors(error.message);
+      setLoading(false);
     }
     setLoading(false);
     isFetching.current = false;
   };
-  // Infinite Scroll: Kích hoạt khi cuộn tới cuối trang
+  // Định nghĩa phương thức khi người dùng scroll đến cuối trang sẽ tăng page và tải thêm hình ảnh
   useEffect(() => {
-    if (!hasMore) return; // Nếu không còn ảnh thì không cần cuộn
+    if (!hasMore) return; 
 
     const handleScroll = () => {
-      // Tính khoảng cách từ cuối trang và xem người dùng có cuộn tới cuối chưa
       if (
         window.innerHeight + document.documentElement.scrollTop + 100 >=
           document.documentElement.scrollHeight &&
@@ -52,35 +60,38 @@ function PhotoList() {
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [loading, hasMore]);
-  // Gọi fetchImages khi component mount lần đầu
+  
+  //Lấy hình ảnh lần đầu
   useEffect(() => {
-    fetchImages(page);
+    fetchPhotos(page);
   }, [page]);
-  console.log(photos);
   return (
     <Container>
       <Row>
         {photos.map((photo) => (
           <Col key={photo.id} md={4} className="mb-4">
-            <PhotoCard url={photo.urls.thumb} author={photo.user.name} />
+            <Link to={`/photos/${photo.id}`}>
+              <PhotoCard url={photo.urls.thumb} author={photo.user.name} />
+            </Link>
           </Col>
         ))}
       </Row>
 
-      {/* Loading Indicator */}
-      {loading && (
-        <div className="text-center">
-          <p>Loading...</p>
+      {/* Phương thức loading*/}
+      {loading && <CustomSpinner />}
+      {/* Thông báo lỗi */}
+      {errors && (
+        <div className="text-center mt-4 text-danger">
+          <h2>Error: {errors}</h2>
         </div>
       )}
-
       {/* Thông báo nếu hết ảnh */}
       {!hasMore && !loading && (
         <div className="text-center mt-4">
-          <p>No more photos to load.</p>
+          <h2>No more photos to load.</h2>
         </div>
       )}
     </Container>
