@@ -15,8 +15,8 @@ function Content() {
         <Route path="/photos" element={<PhotoList />} />
         {/* Định nghĩa đường dẫn tới chi tiết ảnh, với id ảnh */}
         <Route path="/photos/:id" element={<PhotoDetail />} />
-                {/* Định nghĩa đường dẫn trang không phù hợp*/ }
-        <Route path="*" element = {<NotFoundPage></NotFoundPage>}></Route>
+        {/* Định nghĩa đường dẫn trang không phù hợp*/ }
+        <Route path="*" status="404" element = {<NotFoundPage></NotFoundPage>}></Route>
       </Routes>
     </div>
   );

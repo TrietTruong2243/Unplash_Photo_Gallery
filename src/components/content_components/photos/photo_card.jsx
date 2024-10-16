@@ -1,5 +1,4 @@
 import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
 
 function PhotoCard({ url, author }) {
     //Định nghĩa "Card" trong danh sách ảnh
@@ -19,12 +18,14 @@ function PhotoCard({ url, author }) {
           style={{
             maxHeight: "100%",
             maxWidth: "100%",
-            objectFit: "contain", // Giữ tỉ lệ hình ảnh
+            objectFit: "contain", 
           }}
         />
       </div>
       <Card.Body>
-        <Card.Title>{author}</Card.Title>
+      <Card.Title style={{ textDecoration: "none" }}>
+
+            Author: {author}</Card.Title>
       </Card.Body>
     </Card>
   );
