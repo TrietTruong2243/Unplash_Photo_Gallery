@@ -6,7 +6,7 @@ function PhotoCard({ url, author }) {
     <Card style={{background: "#C0C0C0"}}>
       <div
         style={{
-          height: "300px",
+          height: "350px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
